@@ -15,12 +15,10 @@ echo "Install kubectl"
 curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kubectl
 sudo mv kubectl /usr/bin/kubectl
 sudo chmod 755 /usr/bin/kubectl
-echo 'source <(kubectl completion bash)' >>~/.bashrc
+sudo echo 'source <(kubectl completion bash)' >>/etc/profile
 source <(kubectl completion bash)
-echo 'alias k=kubectl' >>~/.bashrc
-echo 'complete -F __start_kubectl k' >>~/.bashrc
+sudo echo 'alias k=kubectl' >>/etc/profile
 alias k=kubectl
-complete -F __start_kubectl k
 echo "Kubectl installed"
 
 echo "Install helm and tiller" 
@@ -30,7 +28,9 @@ cd linux-amd64/
 sudo mv helm tiller /usr/bin/
 sudo chmod 755 /usr/bin/helm
 sudo chmod 755 /usr/bin/tiller
+cd /tmp
 rm -f helm-v2.14.3-linux-amd64.tar.gz
+rm -rf linux-amd64
 echo "Helm and tiller installed"
 
 echo "Fix workaround cgroup error"
@@ -40,12 +40,12 @@ echo "Fixed"
 
 echo "Start k8s kind cluster"
 kind create cluster --config /home/docker/kind-cluster.yml --name local-cluster
-sleep 5
+sleep 10
 echo "Cluster created"
 
 echo "Test cluster"
 export KUBECONFIG="$(kind get kubeconfig-path --name="local-cluster")"
-k get nodes
+kubectl get nodes
 echo "Test completed"
 
 echo "install rancher"
@@ -56,4 +56,3 @@ docker restart rancher
 sleep 10
 curl -k https://127.0.0.1
 echo "Rancher installed"
-
