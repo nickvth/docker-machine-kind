@@ -39,4 +39,11 @@ chmod +x install.sh
 ./install.sh
 ```
 
+Use your new cluster
+```
+export KUBECONFIG="$(kind get kubeconfig-path --name="local-cluster")"
+source /etc/profile
+kubectl get nodes
+```
+
 
