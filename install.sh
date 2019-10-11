@@ -16,7 +16,11 @@ curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/l
 sudo mv kubectl /usr/bin/kubectl
 sudo chmod 755 /usr/bin/kubectl
 echo 'source <(kubectl completion bash)' >>~/.bashrc
-source <(kubectl completion bash)  
+source <(kubectl completion bash)
+echo 'alias k=kubectl' >>~/.bashrc
+echo 'complete -F __start_kubectl k' >>~/.bashrc
+alias k=kubectl
+complete -F __start_kubectl k
 echo "Kubectl installed"
 
 echo "Install helm and tiller" 
@@ -41,7 +45,7 @@ echo "Cluster created"
 
 echo "Test cluster"
 export KUBECONFIG="$(kind get kubeconfig-path --name="local-cluster")"
-kubectl get nodes
+k get nodes
 echo "Test completed"
 
 echo "install rancher"
